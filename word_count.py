@@ -13,9 +13,10 @@ def load_input(input_directory) -> pd.DataFrame:
     #
     filenames = glob.glob(f"{input_directory}/*.txt")
 
-    dataframes = [pd.read_csv(filename, sep = "\t", header = None, names = ["text"]) for filename in filenames]
+    dataframes = [pd.read_csv(filename, sep="\t", header=None, names=[
+                              "text"]) for filename in filenames]
 
-    concatenated_df = pd.concat(dataframes, ignore_index = True)
+    concatenated_df = pd.concat(dataframes, ignore_index=True)
 
     return concatenated_df
 
@@ -27,11 +28,10 @@ def clean_text(dataframe) -> pd.DataFrame:
     #
     dataframe = dataframe.copy()
     dataframe["text"] = dataframe["text"].str.lower()
-    dataframe["text"] = dataframe["text"].str.replace(".","")
-    dataframe["text"] = dataframe["text"].str.replace(",","")
+    dataframe["text"] = dataframe["text"].str.replace(".", "")
+    dataframe["text"] = dataframe["text"].str.replace(",", "")
 
     return dataframe
-
 
 
 def count_words(dataframe) -> pd.DataFrame:
@@ -40,14 +40,13 @@ def count_words(dataframe) -> pd.DataFrame:
     dataframe["text"] = dataframe["text"].str.split()
     dataframe = dataframe.explode("text")
     dataframe["count"] = 1
-    dataframe = dataframe.groupby("text").agg({"count" : "sum"})
+    dataframe = dataframe.groupby("text").agg({"count": "sum"})
     return dataframe
-
 
 
 def save_output(dataframe, output_filename):
     """Save output to a file."""
-    dataframe.to_csv(output_filename, sep = "\t", index=True, header=False)
+    dataframe.to_csv(output_filename, sep="\t", index=True, header=False)
 
 
 #
